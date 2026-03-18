@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{general/fragmentos :: head('Seleccionar Hora')}"></head>
+<body>
+<nav th:replace="~{general/fragmentos :: navbar}"></nav>
+
+<div class="container my-5" style="max-width:600px;">
+    <h2 class="mb-1" style="color:#3d2b1f;">
+        <i class="bi bi-clock" style="color:#b5665a;"></i> Seleccione Hora
+    </h2>
+    <p class="text-muted mb-4" th:text="${servicio != null ? servicio.nombre : ''}"></p>
+
+    <div class="card border-0 shadow-sm p-4">
+        <p><strong>Fecha:</strong> <span th:text="${fechaCita}"></span></p>
+
+        <form th:action="@{/cita/confirmar}" method="post">
+            <input type="hidden" name="idServicio" th:value="${idServicio}"/>
+            <input type="hidden" name="nombre" th:value="${nombre}"/>
+            <input type="hidden" name="telefono" th:value="${telefono}"/>
+            <input type="hidden" name="correo" th:value="${correo}"/>
+            <input type="hidden" name="fechaCita" th:value="${fechaCita}"/>
+
+            <label class="form-label fw-bold">Horas Disponibles</label>
+
+            <div th:if="${#lists.isEmpty(horas)}" class="alert alert-warning">
+                No hay horas disponibles. Por favor seleccione otra fecha.
+            </div>
+
+            <div class="row g-2 mb-4" th:unless="${#lists.isEmpty(horas)}">
+                <div class="col-4" th:each="hora : ${horas}">
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio"
+                               name="horaCita" th:value="${hora}"
+                               th:id="${hora}" required/>
+                        <label class="form-check-label" th:for="${hora}"
+                               th:text="${hora}"></label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-grid" th:unless="${#lists.isEmpty(horas)}">
+                <button type="submit" class="btn btn-gold btn-lg">
+                    <i class="bi bi-check-circle"></i> Confirmar Cita
+                </button>
+            </div>
+            <div th:if="${#lists.isEmpty(horas)}">
+                <a th:href="@{/cita/reservar}" class="btn btn-secondary">
+                    <i class="bi bi-arrow-left"></i> Volver
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<footer th:replace="~{general/fragmentos :: footer}"></footer>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{general/fragmentos :: head('Salon y Spa J&C - Inicio')}"></head>
+<body>
+
+<nav th:replace="~{general/fragmentos :: navbar}"></nav>
+
+<!-- Hero -->
+<div style="background-color: #e8ddd4; color: #3d2b1f; padding: 80px 0; text-align: center;">
+    <div class="container">
+        <h1 style="color: #3d2b1f; font-size: 3rem; letter-spacing: 2px;">Bienvenidos a Salon y Spa J&amp;C</h1>
+        <p class="lead mt-3" style="color: #6b5a52;">Belleza y bienestar en un solo lugar</p>
+        <a th:href="@{/cita/reservar}" class="btn btn-gold btn-lg mt-4 px-5">
+            <i class="bi bi-calendar-check"></i> Reservar cita
+        </a>
+    </div>
+</div>
+
+<!-- Info -->
+<div class="container my-5">
+    <div class="row text-center g-4">
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm h-100 p-4">
+                <i class="bi bi-clock" style="font-size:2rem; color:#b5665a;"></i>
+                <h5 class="mt-3" style="color:#3d2b1f;">Horario</h5>
+                <p class="text-muted">Lunes a Sabado<br/>9:00 am - 6:00 pm</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm h-100 p-4">
+                <i class="bi bi-geo-alt" style="font-size:2rem; color:#b5665a;"></i>
+                <h5 class="mt-3" style="color:#3d2b1f;">Direccion</h5>
+                <p class="text-muted">San Jose, Costa Rica<br/>Centro Comercial El Pueblo</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm h-100 p-4">
+                <i class="bi bi-telephone" style="font-size:2rem; color:#b5665a;"></i>
+                <h5 class="mt-3" style="color:#3d2b1f;">Telefono</h5>
+                <p class="text-muted">+506 8888-8888</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer th:replace="~{general/fragmentos :: footer}"></footer>
+</body>
+</html>

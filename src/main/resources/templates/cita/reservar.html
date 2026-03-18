@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{general/fragmentos :: head('Reservar Cita')}"></head>
+<body>
+<nav th:replace="~{general/fragmentos :: navbar}"></nav>
+
+<div class="container my-5" style="max-width:600px;">
+    <h2 class="mb-4" style="color:#1a1a1a;">
+        <i class="bi bi-calendar-check" style="color:#c9a84c;"></i> Reservar Cita
+    </h2>
+
+    <div class="card border-0 shadow-sm p-4">
+        <form th:action="@{/cita/horarios}" method="get">
+            <div class="mb-3">
+                <label class="form-label fw-bold">Servicio</label>
+                <select name="idServicio" class="form-select" required>
+                    <option value="">-- Seleccione un servicio --</option>
+                    <option th:each="srv : ${servicios}"
+                            th:value="${srv.idServicio}"
+                            th:text="${srv.nombre}"
+                            th:selected="${srv.idServicio == idServicioSeleccionado}">
+                    </option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label class="form-label fw-bold">Nombre</label>
+                <input type="text" name="nombre" class="form-control"
+                       required maxlength="50" placeholder="Su nombre completo"/>
+            </div>
+            <div class="mb-3">
+                <label class="form-label fw-bold">Telefono</label>
+                <input type="text" name="telefono" class="form-control"
+                       required maxlength="15" placeholder="Ej: 8888-8888"/>
+            </div>
+            <div class="mb-3">
+                <label class="form-label fw-bold">Correo</label>
+                <input type="email" name="correo" class="form-control"
+                       maxlength="50" placeholder="correo@ejemplo.com"/>
+            </div>
+            <div class="mb-3">
+                <label class="form-label fw-bold">Fecha</label>
+                <input type="date" name="fechaCita" id="fechaCita" class="form-control" required/>
+            </div>
+            <div class="d-grid mt-4">
+                <button type="submit" class="btn btn-gold btn-lg">
+                    Siguiente <i class="bi bi-arrow-right"></i>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<footer th:replace="~{general/fragmentos :: footer}"></footer>
+<script>
+    document.getElementById('fechaCita').min = new Date().toISOString().split('T')[0];
+</script>
+</body>
+</html>

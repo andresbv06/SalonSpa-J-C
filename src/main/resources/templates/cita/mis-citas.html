@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{general/fragmentos :: head('Mis Citas')}"></head>
+<body>
+<nav th:replace="~{general/fragmentos :: navbar}"></nav>
+<div th:replace="~{general/fragmentos :: mensajes}"></div>
+
+<div class="container my-5">
+    <h2 class="mb-4" style="color:#1a1a1a;">
+        <i class="bi bi-list-check" style="color:#c9a84c;"></i> Mis Citas
+    </h2>
+
+    <div class="card border-0 shadow-sm p-4 mb-4">
+        <form th:action="@{/cita/mis-citas}" method="get" class="d-flex gap-2">
+            <input type="text" name="busqueda" class="form-control"
+                   th:value="${busqueda}"
+                   placeholder="Buscar por telefono o codigo (ej: JC-00001)"/>
+            <button type="submit" class="btn btn-gold px-4">
+                <i class="bi bi-search"></i> Buscar
+            </button>
+        </form>
+    </div>
+
+    <div th:if="${citas != null}">
+        <div th:if="${#lists.isEmpty(citas)}" class="alert alert-info">
+            No se encontraron citas con ese criterio.
+        </div>
+        <div class="table-responsive" th:unless="${#lists.isEmpty(citas)}">
+            <table class="table table-bordered align-middle">
+                <thead style="background:#1a1a1a; color:#c9a84c;">
+                    <tr>
+                        <th>Codigo</th>
+                        <th>Fecha</th>
+                        <th>Hora</th>
+                        <th>Servicio</th>
+                        <th>Estado</th>
+                        <th>Accion</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="c : ${citas}">
+                        <td th:text="${c.codigo}"></td>
+                        <td th:text="${c.fechaCita}"></td>
+                        <td th:text="${c.horaCita}"></td>
+                        <td th:text="${c.servicio.nombre}"></td>
+                        <td>
+                            <span class="badge"
+                                  th:classappend="${c.estado == 'Pendiente'} ? 'bg-warning text-dark' : (${c.estado == 'Cancelada'} ? 'bg-danger' : 'bg-success')"
+                                  th:text="${c.estado}"></span>
+                        </td>
+                        <td>
+                            <button th:if="${c.estado == 'Pendiente'}"
+                                    class="btn btn-sm btn-danger"
+                                    th:onclick="'confirmarCancelar(' + ${c.idCita} + ')'">
+                                <i class="bi bi-x-circle"></i> Cancelar
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Modal confirmar cancelacion -->
+<div class="modal fade" id="modalCancelar" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" style="background:#1a1a1a;">
+                <h5 class="modal-title" style="color:#c9a84c;">Confirmar Cancelacion</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                Esta seguro que desea cancelar esta cita?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-danger" onclick="ejecutarCancelar()">Cancelar Cita</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<form id="formCancelar" th:action="@{/cita/cancelar}" method="post" style="display:none;">
+    <input type="hidden" name="idCita" id="idCancelar"/>
+    <input type="hidden" name="busqueda" th:value="${busqueda}"/>
+</form>
+
+<footer th:replace="~{general/fragmentos :: footer}"></footer>
+<script th:src="@{/js/rutinas.js}"></script>
+</body>
+</html>
