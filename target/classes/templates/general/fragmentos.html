@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:fragment="head(titulo)">
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
@@ -49,8 +50,27 @@
                 <li class="nav-item">
                     <a class="nav-link" th:href="@{/cita/mis-citas}">Mis Citas</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" th:href="@{/servicio/listado}">Admin</a>
+                <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                    <a class="nav-link" th:href="@{/admin/agenda}">
+                        <i class="bi bi-calendar3"></i> Agenda
+                    </a>
+                </li>
+                <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                    <a class="nav-link" th:href="@{/servicio/listado}">
+                        <i class="bi bi-grid"></i> Admin
+                    </a>
+                </li>
+                <li class="nav-item" sec:authorize="isAnonymous()">
+                    <a class="nav-link" th:href="@{/login}">
+                        <i class="bi bi-box-arrow-in-right"></i> Login
+                    </a>
+                </li>
+                <li class="nav-item" sec:authorize="isAuthenticated()">
+                    <form th:action="@{/logout}" method="post" class="d-inline">
+                        <button type="submit" class="btn nav-link" style="color:#e8ddd4;">
+                            <i class="bi bi-box-arrow-right"></i> Salir
+                        </button>
+                    </form>
                 </li>
             </ul>
         </div>

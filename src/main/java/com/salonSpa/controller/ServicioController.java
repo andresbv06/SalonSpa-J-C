@@ -25,8 +25,20 @@ public class ServicioController {
     }
 
     @GetMapping("/catalogo")
-    public String catalogo(Model modelo) {
-        modelo.addAttribute("servicios", servicioService.getServicios());
+    public String catalogo(@RequestParam(required = false) String categoria, Model modelo) {
+        var servicios = servicioService.getServicios();
+        if (categoria != null && !categoria.isBlank() && !categoria.equals("Todos")) {
+            servicios = servicios.stream()
+                    .filter(s -> categoria.equals(s.getCategoria()))
+                    .toList();
+        }
+        var categorias = servicioService.getServicios().stream()
+                .map(s -> s.getCategoria())
+                .distinct()
+                .toList();
+        modelo.addAttribute("servicios", servicios);
+        modelo.addAttribute("categorias", categorias);
+        modelo.addAttribute("categoriaSeleccionada", categoria);
         return "/servicio/catalogo";
     }
 

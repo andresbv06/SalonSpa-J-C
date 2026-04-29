@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{general/fragmentos :: head('Login - Salon y Spa J&C')}"></head>
+<body>
+<nav th:replace="~{general/fragmentos :: navbar}"></nav>
+
+<div class="container my-5" style="max-width:450px;">
+    <div class="card border-0 shadow">
+        <div class="card-header text-center py-4" style="background:#3d2b1f;">
+            <h3 style="color:#e8ddd4;">
+                <i class="bi bi-scissors"></i> Salon y Spa J&amp;C
+            </h3>
+            <p style="color:#b5665a;" class="mb-0">Panel Administrativo</p>
+        </div>
+        <div class="card-body p-4" style="background:#f2ece6;">
+            <div th:if="${param.error}" class="alert alert-danger">
+                Usuario o contraseña incorrectos.
+            </div>
+            <div th:if="${param.logout}" class="alert alert-success">
+                Sesion cerrada correctamente.
+            </div>
+
+            <form th:action="@{/login}" method="post">
+                <div class="mb-3">
+                    <label class="form-label fw-bold" style="color:#3d2b1f;">Usuario</label>
+                    <input type="text" name="username" class="form-control" 
+                           placeholder="Ingrese su usuario" required/>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-bold" style="color:#3d2b1f;">Contraseña</label>
+                    <input type="password" name="password" class="form-control"
+                           placeholder="Ingrese su contraseña" required/>
+                </div>
+                <div class="d-grid mt-4">
+                    <button type="submit" class="btn btn-gold btn-lg">
+                        <i class="bi bi-box-arrow-in-right"></i> Iniciar Sesion
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<footer th:replace="~{general/fragmentos :: footer}"></footer>
+</body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{general/fragmentos :: head('Agenda del Dia')}"></head>
+<body>
+<nav th:replace="~{general/fragmentos :: navbar}"></nav>
+<div th:replace="~{general/fragmentos :: mensajes}"></div>
+
+<div class="container my-5">
+    <h2 class="mb-4" style="color:#3d2b1f;">
+        <i class="bi bi-calendar3" style="color:#b5665a;"></i> Agenda del Dia
+    </h2>
+
+    <!-- Filtro por fecha -->
+    <div class="card border-0 shadow-sm p-4 mb-4">
+        <form th:action="@{/admin/agenda}" method="get" class="d-flex gap-2">
+            <input type="date" name="fecha" class="form-control"
+                   th:value="${fecha}" style="max-width:200px;"/>
+            <button type="submit" class="btn btn-gold px-4">
+                <i class="bi bi-search"></i> Filtrar
+            </button>
+        </form>
+    </div>
+
+    <!-- Tabla de citas -->
+    <div th:if="${citas != null and !citas.empty}">
+        <div class="table-responsive">
+            <table class="table table-bordered align-middle">
+                <thead style="background:#3d2b1f; color:#e8ddd4;">
+                    <tr>
+                        <th>Hora</th>
+                        <th>Cliente</th>
+                        <th>Servicio</th>
+                        <th>Telefono</th>
+                        <th>Estado</th>
+                        <th>Cambiar Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="c : ${citas}">
+                        <td th:text="${c.horaCita}"></td>
+                        <td th:text="${c.nombre}"></td>
+                        <td th:text="${c.servicio.nombre}"></td>
+                        <td th:text="${c.telefono}"></td>
+                        <td>
+                            <span class="badge"
+                                  th:classappend="${c.estado == 'Pendiente'} ? 'bg-warning text-dark' :
+                                                  (${c.estado == 'Confirmado'} ? 'bg-success' :
+                                                  (${c.estado == 'Cancelada'} ? 'bg-danger' : 'bg-secondary'))"
+                                  th:text="${c.estado}"></span>
+                        </td>
+                        <td>
+                            <form th:action="@{/admin/cambiarEstado}" method="post" class="d-flex gap-1">
+                                <input type="hidden" name="idCita" th:value="${c.idCita}"/>
+                                <input type="hidden" name="fecha" th:value="${fecha}"/>
+                                <select name="estado" class="form-select form-select-sm">
+                                    <option value="Pendiente" th:selected="${c.estado == 'Pendiente'}">Pendiente</option>
+                                    <option value="Confirmado" th:selected="${c.estado == 'Confirmado'}">Confirmado</option>
+                                    <option value="Atendida" th:selected="${c.estado == 'Atendida'}">Atendida</option>
+                                    <option value="Cancelada" th:selected="${c.estado == 'Cancelada'}">Cancelada</option>
+                                </select>
+                                <button type="submit" class="btn btn-gold btn-sm">
+                                    <i class="bi bi-check"></i>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div th:if="${citas == null or citas.empty}" class="alert alert-info">
+        No hay citas para esta fecha.
+    </div>
+</div>
+
+<footer th:replace="~{general/fragmentos :: footer}"></footer>
+</body>
+</html>

@@ -5,8 +5,23 @@
 <nav th:replace="~{general/fragmentos :: navbar}"></nav>
 
 <div class="container my-5">
-    <h2 class="text-center mb-1" style="color:#1a1a1a;">Nuestros Servicios</h2>
-    <p class="text-center text-muted mb-5">Belleza y bienestar en un solo lugar</p>
+    <h2 class="text-center mb-1" style="color:#3d2b1f;">Nuestros Servicios</h2>
+    <p class="text-center text-muted mb-4">Belleza y bienestar en un solo lugar</p>
+
+    <!-- Filtro por categoria -->
+    <div class="d-flex justify-content-center gap-2 mb-5 flex-wrap">
+        <a th:href="@{/servicio/catalogo}"
+           class="btn"
+           th:classappend="${categoriaSeleccionada == null} ? 'btn-gold' : 'btn-outline-secondary'">
+            Todos
+        </a>
+        <a th:each="cat : ${categorias}"
+           th:href="@{/servicio/catalogo(categoria=${cat})}"
+           class="btn"
+           th:classappend="${cat == categoriaSeleccionada} ? 'btn-gold' : 'btn-outline-secondary'"
+           th:text="${cat}">
+        </a>
+    </div>
 
     <div class="row g-4">
         <div class="col-md-4" th:each="srv : ${servicios}">
@@ -16,12 +31,12 @@
                          style="height:200px; object-fit:cover;" alt="imagen"/>
                 </div>
                 <div th:unless="${srv.imagenServicio != null and !#strings.isEmpty(srv.imagenServicio)}"
-                     style="height:200px; background:#1a1a1a; display:flex; align-items:center; justify-content:center;">
-                    <i class="bi bi-scissors" style="font-size:4rem; color:#c9a84c;"></i>
+                     style="height:200px; background:#3d2b1f; display:flex; align-items:center; justify-content:center;">
+                    <i class="bi bi-scissors" style="font-size:4rem; color:#e8ddd4;"></i>
                 </div>
                 <div class="card-body text-center">
                     <span class="badge mb-2"
-                          style="background-color:#c9a84c; color:#1a1a1a;"
+                          style="background-color:#b5665a; color:#fff;"
                           th:text="${srv.categoria}">Categoria</span>
                     <h5 class="card-title" th:text="${srv.nombre}">Servicio</h5>
                     <p class="text-muted">
@@ -36,6 +51,10 @@
                 </div>
             </div>
         </div>
+    </div>
+
+    <div th:if="${#lists.isEmpty(servicios)}" class="alert alert-info text-center mt-4">
+        No hay servicios en esta categoria.
     </div>
 </div>
 

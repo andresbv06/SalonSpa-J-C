@@ -4,8 +4,6 @@ import com.salonSpa.domain.Cita;
 import com.salonSpa.domain.Servicio;
 import com.salonSpa.repository.CitaRepository;
 import com.salonSpa.repository.ServicioRepository;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -83,5 +81,21 @@ public class CitaService {
     @Transactional(readOnly = true)
     public Optional<Cita> getCita(Integer idCita) {
         return citaRepository.findById(idCita);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Cita> getCitasPorFecha(String fecha) {
+        return citaRepository.findAll().stream()
+            .filter(c -> fecha.equals(c.getFechaCita()))
+            .sorted((a, b) -> a.getHoraCita().compareTo(b.getHoraCita()))
+            .toList();
+    }
+
+    @Transactional
+    public void cambiarEstado(Integer idCita, String estado) {
+        Cita cita = citaRepository.findById(idCita)
+                .orElseThrow(() -> new IllegalArgumentException("Cita no existe"));
+        cita.setEstado(estado);
+        citaRepository.save(cita);
     }
 }
